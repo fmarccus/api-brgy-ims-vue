@@ -13,7 +13,6 @@ export default function useHouseholds() {
   const storeHousehold = async (data) => {
     try {
       const response = await axios.post("store", data);
-      console.log(response.status);
       if (response.status === 201) {
         await router.push({ name: "StreetsHouseholdsView" });
         await Swal.fire({

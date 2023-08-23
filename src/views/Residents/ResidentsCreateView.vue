@@ -2,6 +2,8 @@
 import { useRoute } from 'vue-router';
 import { computed, reactive } from 'vue';
 import PageHeader from '../../components/PageHeader.vue';
+import useResidents from '../../composables/residents';
+const { storeResident } = useResidents();
 const route = useRoute();
 const householdId = route.params.householdId
 const streetId = route.params.id
@@ -28,7 +30,7 @@ const form = reactive({
     highest_education: '',
     employed: '',
     job_title: '',
-    income: '',
+    income: 0,
     income_classification: '',
 });
 
@@ -97,21 +99,21 @@ const jobTitleOptions = [
 const getIncomeClassification = computed(() => {
     const income = form.income;
     if (income <= 10957) {
-        form.income_classification = "Poor";
+        return form.income_classification = "Poor";
     } else if (income > 10957 && income <= 21194) {
-        form.income_classification = "Low income";
+        return form.income_classification = "Low income";
     } else if (income > 21194 && income <= 43828) {
-        form.income_classification = "Lower middle class";
+        return form.income_classification = "Lower middle class";
     } else if (income > 43828 && income <= 76669) {
-        form.income_classification = "Middle class";
+        return form.income_classification = "Middle class";
     } else if (income > 76670 && income <= 131484) {
-        form.income_classification = "Upper middle class";
+        return form.income_classification = "Upper middle class";
     } else if (income > 131484 && income <= 219140) {
-        form.income_classification = "High income";
+        return form.income_classification = "High income";
     } else if (income > 219140) {
-        form.income_classification = "Rich";
+        return form.income_classification = "Rich";
     } else {
-        form.income_classification = "No data";
+        return form.income_classification = "No data";
     }
 });
 
@@ -123,7 +125,7 @@ const getIncomeClassification = computed(() => {
     <main>
         <PageHeader pretitle="Household Profiling" :title="`Create Resident`" model="resident"
             :currentRouteName="this.$route.name" :back="`/streets/${streetId}/households/${householdId}/residents`" />
-        <form @submit.prevent="" enctype="multipart/form-data">
+        <form @submit.prevent="storeResident(form)" enctype="multipart/form-data">
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
