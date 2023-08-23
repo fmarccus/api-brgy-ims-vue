@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from 'vue-router';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import PageHeader from '../../components/PageHeader.vue';
 const route = useRoute();
 const householdId = route.params.householdId
@@ -12,9 +12,9 @@ const form = reactive({
     last_name: '',
     birth_date: '',
     sex: '',
-    pregnant: '',
-    civil_status: '',
-    religion: '',
+    pregnant: 'No',
+    civil_status: 'Single',
+    religion: 'Catholic',
     contact: '',
     nationality: 'Filipino',
     household_head: '',
@@ -23,7 +23,13 @@ const form = reactive({
     solo_parent: '',
     voter: '',
     pwd: '',
-    disability: ''
+    disability: '',
+    studying: '',
+    highest_education: '',
+    employed: '',
+    job_title: '',
+    income: '',
+    income_classification: '',
 });
 
 const civilStatusOptions = [
@@ -65,30 +71,63 @@ const disabilityOptions = [
     { label: 'Cancer', value: 'Cancer' },
     { label: 'Rare disease', value: 'Rare' },
 ];
+
+const educationOptions = [
+    { label: 'None', value: 'None' },
+    { label: 'Elementary', value: 'Elementary' },
+    { label: 'Junior High', value: 'JHS' },
+    { label: 'Senior High', value: 'SHS' },
+    { label: 'College', value: 'College' },
+    { label: 'Post-graduate', value: 'Postgrad' },
+];
+
+const jobTitleOptions = [
+    { label: 'Manual Laborers', value: 'Manual' },
+    { label: 'Professionals (Doctor, Lawyer, etc)', value: 'Professionals' },
+    { label: 'Government Employee', value: 'Government' },
+    { label: 'Private Employee', value: 'Private' },
+    { label: 'Driver (Pro/Non pro)', value: 'Driver' },
+    { label: 'Househelper', value: 'Househelper' },
+    { label: 'Lending', value: 'Lending' },
+    { label: 'Vendor/Sales Worker', value: 'Sales' },
+    { label: 'Skilled agricultural, forestry and fishery workers, ', value: 'Agricultural' },
+    { label: 'Others', value: 'Others' },
+];
+
+const getIncomeClassification = computed(() => {
+    const income = form.income;
+    if (income <= 10957) {
+        form.income_classification = "Poor";
+    } else if (income > 10957 && income <= 21194) {
+        form.income_classification = "Low income";
+    } else if (income > 21194 && income <= 43828) {
+        form.income_classification = "Lower middle class";
+    } else if (income > 43828 && income <= 76669) {
+        form.income_classification = "Middle class";
+    } else if (income > 76670 && income <= 131484) {
+        form.income_classification = "Upper middle class";
+    } else if (income > 131484 && income <= 219140) {
+        form.income_classification = "High income";
+    } else if (income > 219140) {
+        form.income_classification = "Rich";
+    } else {
+        form.income_classification = "No data";
+    }
+});
+
+
+
 </script>
 
 <template>
     <main>
-
-        <!-- $table->string('pwd');
-        $table->string('disability')->nullable();
-        $table->string('is_studying');
-        $table->string('education');
-        $table->string('institution')->nullable();
-        $table->string('graduate_year')->nullable();
-        $table->string('specialization')->nullable();
-        $table->integer('income')->nullable();
-        $table->string('income_classification');
-        $table->string('is_employed');
-        $table->string('job_title')->nullable(); -->
         <PageHeader pretitle="Household Profiling" :title="`Create Resident`" model="resident"
             :currentRouteName="this.$route.name" :back="`/streets/${streetId}/households/${householdId}/residents`" />
-        <div class="card">
-            <div class="card-body">
-                <form @submit.prevent="" enctype="multipart/form-data">
+        <form @submit.prevent="" enctype="multipart/form-data">
+            <div class="card mb-3">
+                <div class="card-body">
                     <div class="row">
                         <h3>I. Personal Information</h3>
-
                         <div class="col-sm-4 mb-3">
                             <label for="" class="form-label required">First Name</label>
                             <input type="text" class="form-control" v-model="form.first_name" aria-describedby="helpId"
@@ -161,6 +200,10 @@ const disabilityOptions = [
                             </select>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
                     <div class="row">
                         <h3>II. Contact Information</h3>
                         <div class="col-sm-12 mb-3">
@@ -169,6 +212,10 @@ const disabilityOptions = [
                                 placeholder="">
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
                     <div class="row">
                         <h3>III. Household Information</h3>
                         <div class="col-sm-4 mb-3">
@@ -202,7 +249,7 @@ const disabilityOptions = [
                             </div>
                         </div>
                         <div class="col-sm-4 mb-3">
-                            <div class="form-label required">Resident for 6 months</div>
+                            <div class="form-label required">Resident for 6+ months</div>
                             <div>
                                 <label class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="sixmonths" value="Yes"
@@ -247,6 +294,10 @@ const disabilityOptions = [
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
                     <div class="row">
                         <h3>IV. Health Information</h3>
                         <div class="col-sm-6 mb-3">
@@ -270,12 +321,74 @@ const disabilityOptions = [
                             </select>
                         </div>
                     </div>
-
-                    <div class="text-end">
-                        <button class="btn btn-primary">Save</button>
-                    </div>
-                </form>
+                </div>
             </div>
-        </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <h3>V. Education Information</h3>
+                        <div class="col-sm-6 mb-3">
+                            <div class="form-label required">Studying</div>
+                            <div>
+                                <label class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="studying" value="Yes"
+                                        v-model="form.studying">
+                                    <span class="form-check-label">Yes</span>
+                                </label>
+                                <label class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="studying" value="No"
+                                        v-model="form.studying">
+                                    <span class="form-check-label">No</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label for="" class="form-label required">Highest Education Attainment</label>
+                            <select class="form-select" v-model="form.highest_education">
+                                <option v-for="option in educationOptions" :key="option.id" :value="option.value">{{
+                                    option.label }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <h3>VI. Employment Information</h3>
+                        <div class="col-sm-6 mb-3">
+                            <div class="form-label required">Employed</div>
+                            <div>
+                                <label class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="employed" value="Yes"
+                                        v-model="form.employed">
+                                    <span class="form-check-label">Yes</span>
+                                </label>
+                                <label class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="employed" value="No"
+                                        v-model="form.employed">
+                                    <span class="form-check-label">No</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-3" v-if="form.employed == 'Yes'">
+                            <label for="" class="form-label required">Job Title</label>
+                            <select class="form-select" v-model="form.job_title">
+                                <option v-for="option in jobTitleOptions" :key="option.id" :value="option.value">{{
+                                    option.label }}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 mb-3" v-if="form.employed == 'Yes'">
+                            <label for="" class="form-label required">Monthly Income</label>
+                            <input type="number" class="form-control" v-model="form.income" aria-describedby="helpId"
+                                placeholder="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-end">
+                <button class="btn btn-primary">Save</button>
+            </div>
+        </form>
     </main>
 </template>
