@@ -10,5 +10,6 @@ body {
 }
 
 .card {
-  border: lightgray;
+  /* border: lightgray; */
+  /* box-shadow: 0 0.125rem 0.25rem #bbbbbb; */
 }
