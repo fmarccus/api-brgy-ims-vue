@@ -25,8 +25,9 @@ export default function useStreets() {
     try {
       const response = await axios.get("index?page=" + page.value);
       pageCount.value = response.data.page_count;
-      streets.value = response.data.streets.data;
+      streets.value = response.data.streets;
       streetsCount.value = response.data.streets_count;
+      console.log(response.data.streets);
     } catch (error) {
       console.log(error);
     }
