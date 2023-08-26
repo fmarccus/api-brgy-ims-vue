@@ -8,6 +8,7 @@ import "@hennge/vue3-pagination/dist/vue3-pagination.css";
 
 import useStreets from '../../composables/streets';
 const { getStreets, streets, page, pageCount, streetsCount, editStreet, deleteStreet } = useStreets();
+const loading = ref(true);
 
 
 onMounted(async () => {

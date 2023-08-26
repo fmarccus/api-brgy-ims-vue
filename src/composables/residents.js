@@ -15,7 +15,6 @@ export default function useResidents() {
       const response = await axios.get(id + "/residents");
       residents.value = response.data.residents;
       address.value = response.data.address;
-      console.log(response.data.house_number);
     } catch (error) {}
   };
 
@@ -38,6 +37,7 @@ export default function useResidents() {
       }
     }
   };
+
   return {
     indexResidents,
     residents,

@@ -1,15 +1,56 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import PageHeader from '../../components/PageHeader.vue';
+import PageLoader from '../../components/PageLoader.vue';
 import useResidents from '../../composables/residents';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
 const { indexResidents, residents, address } = useResidents();
 const route = useRoute();
 const householdId = route.params.householdId
 const streetId = route.params.id
+const loading = ref(true);
 
-onMounted(() => {
-    indexResidents(householdId);
+async function deleteResident(id) {
+    try {
+        const result = await Swal.fire({
+            title: "Delete this resident?",
+            showDenyButton: true,
+            showConfirmButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Yes, delete this resident`,
+        });
+        if (result.isDenied) {
+            const response = await axios.delete("http://127.0.0.1:8000/api/v1/residents/destroy/" + id);
+            if (response.status === 200) {
+                await indexResidents(householdId);
+                await Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: response.data.msg,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
+        }
+    } catch (error) {
+        await Swal.fire({
+            position: "center",
+            icon: "error",
+            title: error.response.data.msg,
+            showConfirmButton: false,
+            timer: 1500,
+        });
+    }
+
+}
+
+onMounted(async () => {
+    await indexResidents(householdId);
+    loading.value = false;
 });
 
 </script>
@@ -17,7 +58,12 @@ onMounted(() => {
     <PageHeader pretitle="Household Profiling" :title="`Residents in #${address} St.`" model="resident"
         :routerLink="`/streets/${streetId}/households/${householdId}/residents/create`" :currentRouteName="this.$route.name"
         :back="`/streets/${streetId}/households`" />
-
+    <div v-if="loading">
+        <PageLoader text="Loading residents" />
+    </div>
+    <div v-if="!residents.length">
+        <p class="text-center mt-5 fs-3">There are no residents saved in this household</p>
+    </div>
 
     <div class="row">
         <div class="col-sm-3 mb-3" v-for="resident in residents" :key="resident.id">
@@ -47,10 +93,10 @@ onMounted(() => {
                                         </path>
                                         <path d="M16 5l3 3"></path>
                                     </svg>Edit</a>
-                                <a href="#" class="dropdown-item text-danger"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon icon-tabler icon-tabler-trash" width="24" height="24"
-                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                        stroke-linecap="round" stroke-linejoin="round">
+                                <a href="#" @click="deleteResident(resident.id)" class="dropdown-item text-danger"><svg
+                                        xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash"
+                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M4 7l16 0"></path>
                                         <path d="M10 11l0 6"></path>
