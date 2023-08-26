@@ -108,6 +108,7 @@ const jobTitleOptions = [
                 <div class="card-body">
                     <div class="row">
                         <h3>I. Personal Information</h3>
+                        <p class="card-subtitle">Personal information about the resident. It documents their identification in this household.</p>
                         <div class="col-sm-4 mb-3">
                             <label for="" class="form-label required">First Name</label>
                             <input type="text" class="form-control" v-model="form.first_name" aria-describedby="helpId"
@@ -226,6 +227,8 @@ const jobTitleOptions = [
                 <div class="card-body">
                     <div class="row">
                         <h3>II. Contact Information</h3>
+                        <p class="card-subtitle">The contact person/number/email of the resident</p>
+
                         <div class="col-sm-12 mb-3">
                             <label for="" class="form-label required">Phone Number/Email</label>
                             <input type="text" class="form-control" v-model="form.contact" aria-describedby="helpId"
@@ -242,6 +245,8 @@ const jobTitleOptions = [
                 <div class="card-body">
                     <div class="row">
                         <h3>III. Household Information</h3>
+                        <p class="card-subtitle">Key household information of the resident </p>
+
                         <div class="col-sm-4 mb-3">
                             <div class="form-label required">Household Head</div>
                             <div>
@@ -348,6 +353,8 @@ const jobTitleOptions = [
                 <div class="card-body">
                     <div class="row">
                         <h3>IV. Health Information</h3>
+                        <p class="card-subtitle">Information about the health or disability of the resident </p>
+
                         <div class="col-sm-6 mb-3">
                             <div class="form-label required">Person with disability</div>
                             <div>
@@ -384,6 +391,8 @@ const jobTitleOptions = [
                 <div class="card-body">
                     <div class="row">
                         <h3>V. Education Information</h3>
+                        <p class="card-subtitle">Documents the education background of the resident </p>
+
                         <div class="col-sm-6 mb-3">
                             <div class="form-label required">Studying</div>
                             <div>
@@ -422,6 +431,7 @@ const jobTitleOptions = [
                 <div class="card-body">
                     <div class="row">
                         <h3>VI. Employment Information</h3>
+                        <p class="card-subtitle">Information about the social status and employability of the resident</p>
                         <div class="col-sm-6 mb-3">
                             <div class="form-label required">Employed</div>
                             <div>

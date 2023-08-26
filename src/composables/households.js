@@ -34,10 +34,12 @@ export default function useHouseholds() {
     try {
       const response = await axios.get("edit/" + id);
       household.value = await response.data.data;
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   const updateHousehold = async (id) => {
     try {
