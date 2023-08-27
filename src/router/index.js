@@ -8,6 +8,7 @@ import HouseholdsCreateView from "../views/Households/HouseholdsCreateView.vue";
 import HouseholdsEditView from "../views/Households/HouseholdsEditView.vue";
 import ResidentsIndexView from "../views/Residents/ResidentsIndexView.vue";
 import ResidentsCreateView from "../views/Residents/ResidentsCreateView.vue";
+import ResidentsEditView from "../views/Residents/ResidentsEditView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +57,11 @@ const router = createRouter({
       path: "/streets/:id/households/:householdId/residents/create",
       name: "ResidentsCreateView",
       component: ResidentsCreateView,
+    },
+    {
+      path: "/streets/:id/households/:householdId/residents/edit/:residentId",
+      name: "ResidentsEditView",
+      component: ResidentsEditView,
     },
   ],
 });

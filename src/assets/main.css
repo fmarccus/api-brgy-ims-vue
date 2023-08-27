@@ -8,7 +8,10 @@
 body {
   font-feature-settings: "cv03", "cv04", "cv11";
 }
-
+.datagrid-title {
+  font-weight: bold;
+  text-decoration: underline;
+}
 .card {
   /* border: lightgray; */
   /* box-shadow: 0 0.125rem 0.25rem #bbbbbb; */
